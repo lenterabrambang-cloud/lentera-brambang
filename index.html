@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lentera Brambang - Mengkupas Fakta, Mencerahkan Sesama</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brambang: {
+                            50: '#fff1f1',
+                            100: '#ffdfdf',
+                            500: '#e53935',
+                            600: '#c62828',
+                            700: '#b71c1c',
+                            800: '#8e0000',
+                            900: '#5f0000',
+                        },
+                        lentera: {
+                            gold: '#f59e0b',
+                            amber: '#fbbf24',
+                            light: '#fef3c7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .gradient-text {
+            background: linear-gradient(135deg, #ef4444 0%, #f59e0b 50%, #eab308 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col justify-between selection:bg-brambang-600 selection:text-white">
+
+    <div>
+        <!-- Top Utility Bar -->
+        <div class="bg-gradient-to-r from-brambang-900 via-brambang-800 to-slate-900 text-white text-xs py-2 px-4 shadow-sm">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-calendar-day text-lentera-amber"></i> <span id="current-date">Memuat tanggal...</span></span>
+                    <span class="hidden md:flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-lentera-amber"></i> Brebes, Jawa Tengah</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span id="admin-badge" class="hidden bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase animate-pulse flex items-center gap-1">
+                        <i class="fa-solid fa-shield-halved"></i> Mode Admin
+                    </span>
+                    <span class="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-900 px-2.5 py-0.5 rounded-full font-black text-[10px] uppercase tracking-wider shadow-sm">
+                        Lentera Brambang
+                    </span>
+                    <button id="theme-toggle" class="hover:text-lentera-amber transition p-1 rounded-lg bg-white/10 cursor-pointer">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline text-lentera-amber"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-md sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+                <!-- Logo & Tagline -->
+                <div class="flex items-center space-x-3.5 cursor-pointer group select-none" onclick="handleLogoClick()">
+                    <div class="relative">
+                        <img src="lentera.jpg" alt="Logo Lentera Brambang" class="h-13 w-13 object-contain rounded-2xl shadow-lg border-2 border-lentera-amber/80 bg-brambang-50 transition transform group-hover:scale-105" onerror="this.src='https://placehold.co/100x100/8e0000/fff?text=LB'">                  
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none gradient-text">
+                            Lentera Brambang
+                        </h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold italic mt-1 tracking-wide flex items-center gap-1">
+                            <span>"Mengkupas Fakta, Mencerahkan Sesama"</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Search & Action Buttons -->
+                <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+                    <div class="relative flex-1 md:w-64">
+                        <input type="text" id="search-input" placeholder="Cari berita & isu Brebes..." onkeyup="handleSearch(event)" class="w-full pl-9 pr-4 py-2 text-sm bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-brambang-500 transition shadow-inner text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                    </div>
+                    
+                    <!-- Admin Button -->
+                    <button id="admin-add-btn" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 px-4 py-2 rounded-full text-xs font-extrabold shadow-lg flex items-center space-x-2 transition transform hover:scale-105 whitespace-nowrap">
+                        <i class="fa-solid fa-circle-plus text-sm"></i>
+                        <span>Upload Admin</span>
+                    </button>
+
+                    <!-- Public UGC Button -->
+                    <button onclick="openUGCModal()" class="bg-gradient-to-r from-brambang-600 to-brambang-800 hover:from-brambang-700 hover:to-brambang-900 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg flex items-center space-x-2 transition transform hover:scale-105 whitespace-nowrap border border-red-500/30">
+                        <i class="fa-solid fa-feather"></i>
+                        <span>Tulis Berita / Opini</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-200/80 dark:border-slate-800 px-4">
+                <div class="max-w-7xl mx-auto flex items-center space-x-1.5 overflow-x-auto hide-scrollbar py-2 text-xs font-bold">
+                    <button onclick="switchCategory('Beranda')" class="nav-btn px-4 py-2 rounded-xl text-brambang-700 dark:text-lentera-amber font-extrabold bg-white dark:bg-slate-800 shadow-sm transition flex items-center gap-1.5" data-category="Beranda">
+                        <i class="fa-solid fa-house"></i> Beranda
+                    </button>
+                    <button onclick="switchCategory('News')" class="nav-btn px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 flex items-center gap-1.5" data-category="News">
+                        <i class="fa-solid fa-newspaper"></i> Kabar Brebes
+                    </button>
+                    <button onclick="switchCategory('Kupas Tuntas')" class="nav-btn px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 flex items-center gap-1.5" data-category="Kupas Tuntas">
+                        <i class="fa-solid fa-magnifying-glass-chart text-amber-500"></i> Kupas Tuntas
+                    </button>
+                    <button onclick="switchCategory('Pedasnya Brambang')" class="nav-btn px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 flex items-center gap-1.5" data-category="Pedasnya Brambang">
+                        <i class="fa-solid fa-pepper-hot text-red-500"></i> Pedasnya Brambang
+                    </button>
+                    <button onclick="switchCategory('Opini Warga')" class="nav-btn px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 flex items-center gap-1.5" data-category="Opini Warga">
+                        <i class="fa-solid fa-comments text-blue-500"></i> Suara Warga
+                    </button>
+                    <button onclick="switchCategory('Galeri')" class="nav-btn px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 flex items-center gap-1.5" data-category="Galeri">
+                        <i class="fa-solid fa-photo-film text-purple-500"></i> Galeri & Video
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <!-- Running Ticker -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 mb-6 rounded-2xl shadow-sm flex items-center justify-between gap-3">
+                <div class="flex items-center space-x-3 overflow-hidden flex-1">
+                    <span class="bg-gradient-to-r from-brambang-600 to-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-xl uppercase tracking-wider animate-pulse flex-shrink-0 flex items-center gap-1">
+                        <i class="fa-solid fa-bolt"></i> INFO KINI
+                    </span>
+                    <marquee class="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                        Selamat datang di Lentera Brambang Brebes &bull; Kirim karya tulisan dan aspirasi Anda di menu Suara Warga!
+                    </marquee>
+                </div>
+            </div>
+
+            <!-- Dynamic Main Content -->
+            <div id="main-content-view"></div>
+        </main>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-300 mt-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <img src="lentera.jpg" alt="Logo" class="h-10 w-10 rounded-xl bg-white p-0.5 object-contain" onerror="this.src='https://placehold.co/100x100/8e0000/fff?text=LB'">
+                    <span class="text-lg font-black uppercase tracking-wider gradient-text">Lentera Brambang</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Portal berita independen Brebes. Mengupas fakta berlapis bagai bawang merah demi mencerahkan dan mencerdaskan publik.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-xs mb-4 uppercase tracking-wider border-b border-slate-800 pb-2">Rubrik Jurnalistik</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" onclick="switchCategory('News')" class="hover:text-lentera-amber transition">Kabar Brebes Raya</a></li>
+                    <li><a href="#" onclick="switchCategory('Kupas Tuntas')" class="hover:text-lentera-amber transition">Laporan Investigasi (Kupas Tuntas)</a></li>
+                    <li><a href="#" onclick="switchCategory('Pedasnya Brambang')" class="hover:text-lentera-amber transition">Pedasnya Brambang (Lifestyle/Kampus)</a></li>
+                    <li><a href="#" onclick="switchCategory('Opini Warga')" class="hover:text-lentera-amber transition">Suara Warga / Kolom Opini</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-xs mb-4 uppercase tracking-wider border-b border-slate-800 pb-2">Redaksi & Panduan</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" onclick="openUGCModal()" class="hover:text-lentera-amber transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Kirim Tulisan Warga</a></li>
+                    <li><a href="#" class="hover:text-lentera-amber transition">Pedoman Media Siber</a></li>
+                    <li><a href="#" class="hover:text-lentera-amber transition">Kode Etik Jurnalistik</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-xs mb-4 uppercase tracking-wider border-b border-slate-800 pb-2">Redaksi Brebes</h4>
+                <p class="text-xs text-slate-400 mb-2"><i class="fa-solid fa-map-pin text-lentera-amber mr-1"></i> Brebes, Jawa Tengah 52212</p>
+                <p class="text-xs text-slate-400"><i class="fa-solid fa-envelope text-lentera-amber mr-1"></i> lenterabrambang@gmail.com</p>
+            </div>
+        </div>
+        <div class="bg-slate-950 py-4 text-center text-xs text-slate-500">
+            &copy; <span id="footer-year">2026</span> Lentera Brambang. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Custom Admin Password Auth Modal -->
+    <div id="admin-pass-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden p-6 text-center space-y-4">
+            <div class="w-16 h-16 bg-red-500/10 text-brambang-600 rounded-2xl flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Otentikasi Mode Admin</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Masukkan kata sandi rahasia untuk melanjutkan.</p>
+            </div>
+            <div class="relative">
+                <input type="password" id="admin-password-input" placeholder="Password Admin..." class="w-full text-sm px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brambang-500 text-center font-bold tracking-widest text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600">
+                    <i id="pass-eye-icon" class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeAdminPassModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Batal</button>
+                <button onclick="verifyAdminPassword()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-brambang-600 hover:bg-brambang-700 text-white shadow-md">Masuk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal -->
+    <div id="delete-confirm-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden p-6 text-center space-y-4 animate-bounce-short">
+            <div class="w-16 h-16 bg-red-500/10 text-red-600 rounded-2xl flex items-center justify-center mx-auto text-3xl">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">Hapus Berita Ini?</h3>
+                <p id="delete-modal-title" class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 italic px-2"></p>
+            </div>
+            <p class="text-[11px] text-red-500 font-semibold bg-red-500/10 p-2.5 rounded-xl border border-red-500/20">
+                Tindakan ini permanen dan tidak dapat dibatalkan.
+            </p>
+            <div class="flex space-x-2 pt-1">
+                <button onclick="closeDeleteModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 transition">Batal</button>
+                <button onclick="confirmDeleteArticle()" class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-700 text-white shadow-md transition">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Detail Modal -->
+    <div id="article-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex justify-center items-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+                <span id="modal-category" class="bg-brambang-100 text-brambang-800 dark:bg-brambang-950 dark:text-brambang-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Kategori</span>
+                <button onclick="closeArticleModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 md:p-8 overflow-y-auto space-y-5">
+                <h2 id="modal-title" class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white leading-snug"></h2>
+                <div class="flex items-center justify-between border-y border-slate-200 dark:border-slate-800 py-3 text-xs text-slate-500 dark:text-slate-400">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-brambang-600 text-white font-bold flex items-center justify-center text-xs" id="modal-author-avatar">LB</div>
+                        <div>
+                            <p class="font-bold text-slate-800 dark:text-slate-200" id="modal-author"></p>
+                            <p id="modal-date" class="text-[10px]"></p>
+                        </div>
+                    </div>
+                    <!-- Actions inside modal (Like & Share) -->
+                    <div class="flex items-center space-x-2">
+                        <button id="modal-like-btn" onclick="toggleLikeInModal()" class="px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 border border-slate-200 dark:border-slate-700">
+                            <i id="modal-like-icon" class="fa-regular fa-heart"></i>
+                            <span id="modal-like-count">0</span>
+                        </button>
+                        <button id="modal-share-btn" onclick="shareArticleInModal()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition flex items-center gap-1.5 border border-slate-200 dark:border-slate-700">
+                            <i class="fa-solid fa-share-nodes text-blue-500"></i> Bagikan
+                        </button>
+                    </div>
+                </div>
+                <div id="modal-media-container" class="rounded-2xl overflow-hidden shadow-md max-h-[380px]"></div>
+                <div id="modal-body-content" class="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 text-sm leading-relaxed space-y-3"></div>
+
+                <div class="border-t border-slate-200 dark:border-slate-800 pt-6 mt-6 space-y-4">
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-white flex items-center">
+                        <i class="fa-solid fa-comments mr-2 text-brambang-600"></i> Komentar Warga (<span id="comment-count">0</span>)
+                    </h3>
+                    
+                    <!-- Form Komentar Tanpa Nama (Anonim) & Tidak Monoton -->
+                    <div class="bg-gradient-to-r from-slate-50 to-amber-50/30 dark:from-slate-800/60 dark:to-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-inner space-y-3">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-semibold px-1">
+                            <span><i class="fa-solid fa-user-secret text-amber-500 mr-1"></i> Komentar sebagai Warga Anonim</span>
+                            <span>Publik & Real-time</span>
+                        </div>
+                        <textarea id="comment-text" rows="2.5" placeholder="Tulis tanggapan atau opini Anda di sini..." class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brambang-500 transition shadow-sm text-slate-800 dark:text-slate-100 placeholder-slate-400"></textarea>
+                        <div class="flex justify-end">
+                            <button onclick="submitComment()" class="bg-gradient-to-r from-brambang-600 to-brambang-800 hover:from-brambang-700 hover:to-brambang-900 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-md transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-paper-plane"></i> Kirim Tanggapan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- List Komentar -->
+                    <div id="comments-list" class="space-y-3 pt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Social Media Modal Picker -->
+    <div id="share-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden p-6 text-center space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase"><i class="fa-solid fa-share-nodes text-brambang-600 mr-1.5"></i> Bagikan Berita Ini</h3>
+                <button onclick="closeShareModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-3 text-xs font-semibold">
+                <button onclick="shareToSocial('whatsapp')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 transition space-y-1.5">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <span>WhatsApp</span>
+                </button>
+                <button onclick="shareToSocial('facebook')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 transition space-y-1.5">
+                    <i class="fa-brands fa-facebook text-2xl"></i>
+                    <span>Facebook</span>
+                </button>
+                <button onclick="shareToSocial('instagram')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 transition space-y-1.5">
+                    <i class="fa-brands fa-instagram text-2xl"></i>
+                    <span>Instagram</span>
+                </button>
+                <button onclick="shareToSocial('tiktok')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-800/10 dark:bg-slate-800 hover:bg-slate-800/20 text-slate-900 dark:text-white transition space-y-1.5">
+                    <i class="fa-brands fa-tiktok text-2xl"></i>
+                    <span>TikTok</span>
+                </button>
+                <button onclick="shareToSocial('twitter')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-sky-500/10 hover:bg-sky-500/20 text-sky-500 transition space-y-1.5">
+                    <i class="fa-brands fa-twitter text-2xl"></i>
+                    <span>Twitter/X</span>
+                </button>
+                <button onclick="shareToSocial('copy')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 transition space-y-1.5">
+                    <i class="fa-solid fa-link text-2xl"></i>
+                    <span>Salin Link</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Form Modal -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex justify-center items-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden p-6 md:p-8 space-y-5">
+            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 id="admin-modal-title" class="text-lg font-bold text-amber-500 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved"></i> Upload Berita (Admin)
+                </h3>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="admin-form" onsubmit="handleAdminSubmit(event)" class="space-y-4">
+                <input type="hidden" id="admin-edit-id" value="">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Penulis / Redaksi</label>
+                    <input type="text" id="admin-author" required placeholder="Redaksi Lentera Brambang" class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Pilih Rubrik</label>
+                        <select id="admin-category" class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100">
+                            <option value="News" class="bg-white dark:bg-slate-800">Kabar Brebes</option>
+                            <option value="Kupas Tuntas" class="bg-white dark:bg-slate-800">Kupas Tuntas</option>
+                            <option value="Pedasnya Brambang" class="bg-white dark:bg-slate-800">Pedasnya Brambang</option>
+                            <option value="Opini Warga" class="bg-white dark:bg-slate-800">Suara Warga</option>
+                            <option value="Galeri" class="bg-white dark:bg-slate-800">Galeri & Video</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Judul Berita</label>
+                        <input type="text" id="admin-title" required placeholder="Judul berita..." class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Unggah Foto / Video</label>
+                    <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-4 text-center hover:border-amber-500 transition bg-slate-50 dark:bg-slate-950 cursor-pointer relative">
+                        <input type="file" id="admin-media-file" accept="image/*,video/*" onchange="previewAdminMedia(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                        <div id="admin-upload-placeholder" class="space-y-1">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-amber-500"></i>
+                            <p class="text-xs font-semibold text-slate-600 dark:text-slate-300">Pilih berkas foto atau video</p>
+                        </div>
+                        <div id="admin-upload-preview" class="hidden relative mt-2 max-h-36 overflow-hidden rounded-xl flex justify-center items-center"></div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Atau Link Video (Opsional untuk Video 2GB+)</label>
+                    <input type="url" id="admin-media-url" placeholder="https://www.youtube.com/watch?v=..." class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Isi Berita Lengkap</label>
+                    <textarea id="admin-content" rows="5" required placeholder="Tulis isi berita secara lengkap..." class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeAdminModal()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Batal</button>
+                    <button type="submit" id="admin-submit-btn" class="px-5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-md">Terbitkan Berita</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- UGC Public Modal -->
+    <div id="ugc-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex justify-center items-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-xl rounded-3xl shadow-2xl overflow-hidden p-6 md:p-8 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-brambang-600 dark:text-lentera-amber uppercase">Suara Warga / Kirim Artikel</h3>
+                <button onclick="closeUGCModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="ugc-form" onsubmit="handleUGPSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Nama Penulis</label>
+                    <input type="text" id="ugc-author" required placeholder="Contoh: Ahmad (Warga Ketanggungan)" class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Judul Artikel</label>
+                    <input type="text" id="ugc-title" required placeholder="Judul tulisan Anda..." class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Isi Opini/Berita</label>
+                    <textarea id="ugc-content" rows="4" required placeholder="Tulis inspirasi atau aspirasi Anda..." class="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Upload Foto / Video</label>
+                    <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-3 text-center hover:border-brambang-500 transition bg-slate-50 dark:bg-slate-950 cursor-pointer relative">
+                        <input type="file" id="ugc-media-file" accept="image/*,video/*" onchange="previewUGCMedia(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                        <div id="ugc-upload-placeholder" class="space-y-1">
+                            <i class="fa-solid fa-cloud-arrow-up text-xl text-brambang-600 dark:text-lentera-amber"></i>
+                            <p class="text-xs font-semibold text-slate-600 dark:text-slate-300">Pilih atau letakkan berkas foto/video</p>
+                        </div>
+                        <div id="ugc-upload-preview" class="hidden relative mt-1 max-h-32 overflow-hidden rounded-xl flex justify-center items-center"></div>
+                    </div>
+                </div>
+                <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-slate-600 dark:text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-paperclip text-amber-500"></i>
+                    <span>Sertakan lampiran foto/video saat aplikasi email Anda terbuka.</span>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeUGCModal()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-brambang-600 hover:bg-brambang-700 text-white shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim ke Email
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- KODE FIREBASE (SDK) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHYMVTw9UpHDtavQoFAZSblS_D127gmRE",
+            authDomain: "lentera-brambang.firebaseapp.com",
+            projectId: "lentera-brambang",
+            storageBucket: "lentera-brambang.firebasestorage.app",
+            messagingSenderId: "380573531059",
+            appId: "1:380573531059:web:a7fa3cab3f2f7ee11069c6",
+            measurementId: "G-SVE8Z99VMV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.firebaseCollection = collection;
+        window.firebaseAddDoc = addDoc;
+        window.firebaseOnSnapshot = onSnapshot;
+        window.firebaseQuery = query;
+        window.firebaseOrderBy = orderBy;
+        window.firebaseServerTimestamp = serverTimestamp;
+        window.firebaseDeleteDoc = deleteDoc;
+        window.firebaseDoc = doc;
+
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
+    <script>
+        let articles = [];
+        let currentActiveCategory = 'Beranda';
+        let currentOpenArticleId = null;
+
+        let sharingArticleData = null;
+        let deletingArticleId = null;
+
+        let isAdminMode = false;
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+
+        let adminMediaUrl = '';
+        let adminMediaType = 'image';
+        let ugcMediaFileName = '';
+        let unsubscribeComments = null;
+        let unsubscribeArticles = null;
+
+        window.addEventListener('firebase-ready', () => {
+            setupThemeToggle();
+            listenRealtimeArticles();
+            updateCurrentDate();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupThemeToggle();
+            if (window.db) {
+                listenRealtimeArticles();
+                updateCurrentDate();
+            }
+        });
+
+        function listenRealtimeArticles() {
+            if (!window.db) return;
+
+            const q = window.firebaseQuery(
+                window.firebaseCollection(window.db, "articles"),
+                window.firebaseOrderBy('timestamp', 'desc')
+            );
+
+            if (unsubscribeArticles) unsubscribeArticles();
+
+            unsubscribeArticles = window.firebaseOnSnapshot(q, (snapshot) => {
+                articles = [];
+                snapshot.forEach((doc) => {
+                    articles.push({
+                        docId: doc.id,
+                        ...doc.data()
+                    });
+                });
+                renderMainContent();
+            }, (error) => {
+                console.error("Error loading articles:", error);
+            });
+        }
+
+        function handleLogoClick() {
+            logoClickCount++;
+            clearTimeout(logoClickTimer);
+
+            if (logoClickCount === 5) {
+                logoClickCount = 0;
+                if (isAdminMode) {
+                    isAdminMode = false;
+                    alertBoxCustom("🔒 Mode Admin Dinonaktifkan.");
+                    document.getElementById('admin-badge').classList.add('hidden');
+                    document.getElementById('admin-add-btn').classList.add('hidden');
+                    renderMainContent();
+                } else {
+                    document.getElementById('admin-pass-modal').classList.remove('hidden');
+                    document.getElementById('admin-password-input').focus();
+                }
+            } else {
+                logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
+            }
+        }
+
+        function closeAdminPassModal() {
+            document.getElementById('admin-pass-modal').classList.add('hidden');
+            document.getElementById('admin-password-input').value = '';
+        }
+
+        function verifyAdminPassword() {
+            const pass = document.getElementById('admin-password-input').value;
+            if (pass === "LenteraB") {
+                isAdminMode = true;
+                closeAdminPassModal();
+                alertBoxCustom("🔓 Mode Admin Berhasil Diaktifkan!");
+                document.getElementById('admin-badge').classList.remove('hidden');
+                document.getElementById('admin-add-btn').classList.remove('hidden');
+                renderMainContent();
+            } else {
+                alertBoxCustom("❌ Password Salah!");
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('admin-password-input');
+            const icon = document.getElementById('pass-eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) dateElement.innerText = now.toLocaleDateString('id-ID', options);
+            const footerYear = document.getElementById('footer-year');
+            if (footerYear) footerYear.innerText = now.getFullYear();
+        }
+
+        function setupThemeToggle() {
+            const toggleBtn = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+                html.classList.remove('light');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+            }
+
+            if (!toggleBtn) return;
+            const newToggleBtn = toggleBtn.cloneNode(true);
+            toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
+
+            newToggleBtn.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    html.classList.add('light');
+                    localStorage.theme = 'light';
+                } else {
+                    html.classList.add('dark');
+                    html.classList.remove('light');
+                    localStorage.theme = 'dark';
+                }
+            });
+        }
+
+        function switchCategory(category) {
+            currentActiveCategory = category;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.getAttribute('data-category') === category) {
+                    btn.className = "nav-btn px-4 py-2 rounded-xl text-brambang-700 dark:text-lentera-amber font-extrabold bg-white dark:bg-slate-800 shadow-sm transition flex items-center gap-1.5";
+                } else {
+                    btn.className = "nav-btn px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300 flex items-center gap-1.5";
+                }
+            });
+            renderMainContent();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderMainContent() {
+            const container = document.getElementById('main-content-view');
+            if (!container) return;
+            let filteredArticles = currentActiveCategory === 'Beranda' 
+                ? articles 
+                : articles.filter(art => art.category.toLowerCase() === currentActiveCategory.toLowerCase() || (currentActiveCategory === 'Galeri' && art.category === 'Galeri'));
+
+            container.innerHTML = `
+                <div class="mb-8 bg-gradient-to-r from-brambang-800 via-brambang-700 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex justify-between items-center relative overflow-hidden border border-red-500/20">
+                    <div class="relative z-10">
+                        <span class="text-[10px] font-bold tracking-widest text-lentera-amber uppercase bg-black/30 px-3 py-1 rounded-full border border-amber-500/30">Rubrik Jurnalistik</span>
+                        <h2 class="text-2xl md:text-3xl font-black uppercase tracking-wide mt-2">${currentActiveCategory}</h2>
+                        <p class="text-xs text-slate-200 mt-1">Mengupas tuntas kabar dan informasi faktual Brebes Raya.</p>
+                    </div>
+                    <div class="relative z-10">
+                        ${isAdminMode ? `
+                            <button onclick="openAdminModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-5 py-2.5 rounded-2xl text-xs font-black shadow-lg transition whitespace-nowrap flex items-center gap-2"><i class="fa-solid fa-plus-circle"></i> Upload Berita</button>
+                        ` : `
+                            <button onclick="openUGCModal()" class="bg-white hover:bg-slate-100 text-brambang-800 px-5 py-2.5 rounded-2xl text-xs font-bold shadow-lg transition whitespace-nowrap flex items-center gap-2"><i class="fa-solid fa-pen"></i> Tulis Berita</button>
+                        `}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-6" id="articles-grid-container"></div>
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                            <div class="flex items-center space-x-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                                <i class="fa-solid fa-square-poll-vertical text-amber-500 text-lg"></i>
+                                <h3 class="font-bold text-sm text-slate-900 dark:text-white">Polling Suara Brebes</h3>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Bagaimana menurut Anda kesiapan fasilitas publik di Brebes saat ini?</p>
+                            <div class="space-y-2 text-xs">
+                                <button onclick="votePoll(this)" class="w-full text-left p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brambang-500 transition font-medium flex justify-between text-slate-700 dark:text-slate-300">
+                                    <span>Sangat Baik & Lengkap</span>
+                                    <span class="text-slate-400">45%</span>
+                                </button>
+                                <button onclick="votePoll(this)" class="w-full text-left p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-brambang-500 transition font-medium flex justify-between text-slate-700 dark:text-slate-300">
+                                    <span>Perlu Peningkatan</span>
+                                    <span class="text-slate-400">55%</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-amber-500/10 via-red-500/5 to-transparent p-5 rounded-3xl border border-amber-500/20 text-xs space-y-2">
+                            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5"><i class="fa-solid fa-bullhorn text-amber-500"></i> Kirim Artikel Anda</h4>
+                            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Sampaikan aspirasi, berita daerah, atau karya opini Anda untuk diterbitkan langsung di Lentera Brambang.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            renderGridArticles(filteredArticles);
+        }
+
+        function votePoll(btn) {
+            alertBoxCustom("Terima kasih atas partisipasi polling Anda!");
+        }
+
+        function renderGridArticles(artsToRender) {
+            const gridContainer = document.getElementById('articles-grid-container');
+            if(!gridContainer) return;
+
+            if(artsToRender.length === 0) {
+                gridContainer.innerHTML = `
+                    <div class="py-16 text-center space-y-3 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-700"></i>
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Belum ada artikel atau berita yang diterbitkan pada rubrik ini.</p>
+                        <div>
+                            ${isAdminMode ? `
+                                <button onclick="openAdminModal()" class="mt-2 bg-amber-500 hover:bg-amber-600 text-slate-950 px-5 py-2 rounded-2xl text-xs font-bold shadow transition">
+                                    <i class="fa-solid fa-upload mr-1"></i> Upload Berita Sekarang
+                                </button>
+                            ` : `
+                                <button onclick="openUGCModal()" class="mt-2 bg-brambang-600 hover:bg-brambang-700 text-white px-5 py-2 rounded-2xl text-xs font-bold shadow transition">
+                                    <i class="fa-solid fa-plus mr-1"></i> Buat Berita Baru
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-6">';
+            artsToRender.forEach(art => {
+                const heartClass = art.hasLiked ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart";
+                const heartBtnStyle = art.hasLiked ? "text-red-500 font-bold" : "text-slate-500 dark:text-slate-400 hover:text-red-500";
+
+                const isYouTube = art.image && (art.image.includes('youtube.com') || art.image.includes('youtu.be'));
+                let mediaHtml = '';
+                if (isYouTube) {
+                    mediaHtml = `<div class="w-full h-48 bg-slate-900 flex items-center justify-center text-white relative"><i class="fa-brands fa-youtube text-4xl text-red-500"></i><span class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-video mr-1"></i> Video YouTube</span></div>`;
+                } else if (art.mediaType === 'video') {
+                    mediaHtml = `<video src="${art.image}" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" muted></video><span class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-video mr-1"></i> Video</span>`;
+                } else {
+                    mediaHtml = `<img src="${art.image}" alt="${art.title}" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/8e0000/fff?text=Lentera+Brambang'">`;
+                }
+
+                html += `
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200 dark:border-slate-800 flex flex-col justify-between group relative">
+                        ${isAdminMode ? `
+                            <div class="absolute top-3 right-3 z-20 flex space-x-1.5 bg-slate-950/80 p-1.5 rounded-xl backdrop-blur-md">
+                                <button onclick="deleteArticle(event, ${art.id})" title="Hapus" class="bg-red-600 hover:bg-red-700 text-white w-7 h-7 rounded-lg flex items-center justify-center text-xs transition">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        ` : ''}
+
+                        <div onclick="openArticle(${art.id})" class="cursor-pointer">
+                            <div class="relative overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                ${mediaHtml}
+                                <span class="absolute top-3 left-3 bg-brambang-600/90 backdrop-blur-md text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">${art.category}</span>
+                            </div>
+                            <div class="p-5 space-y-2">
+                                <div class="flex items-center space-x-2 text-[10px] text-slate-400 font-medium">
+                                    <span><i class="fa-solid fa-user mr-1"></i> ${art.author}</span>
+                                    <span>&bull;</span>
+                                    <span>${art.date}</span>
+                                </div>
+                                <h4 class="font-bold text-slate-900 dark:text-white group-hover:text-brambang-600 dark:group-hover:text-lentera-amber transition line-clamp-2 text-sm leading-snug">${art.title}</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">${art.excerpt}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="px-5 pb-4 pt-0 flex justify-between items-center text-xs border-t border-slate-100 dark:border-slate-800/80 pt-3 mt-2">
+                            <button onclick="toggleLikeCard(event, ${art.id})" class="flex items-center space-x-1.5 transition ${heartBtnStyle}">
+                                <i class="${heartClass}"></i>
+                                <span>${art.likes} Suka</span>
+                            </button>
+                            
+                            <button onclick="openArticle(${art.id})" class="flex items-center space-x-1.5 text-slate-500 dark:text-slate-400 hover:text-brambang-600 transition">
+                                <i class="fa-regular fa-comment"></i>
+                                <span>Komentar</span>
+                            </button>
+
+                            <button onclick="openShareModal(event, ${art.id})" class="flex items-center space-x-1.5 text-slate-500 dark:text-slate-400 hover:text-blue-500 transition">
+                                <i class="fa-solid fa-share-nodes"></i>
+                                <span>Bagikan</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            gridContainer.innerHTML = html;
+        }
+
+        function toggleLikeCard(event, id) {
+            event.stopPropagation();
+            const art = articles.find(a => a.id === id);
+            if (!art) return;
+
+            if (art.hasLiked) {
+                art.likes = Math.max(0, art.likes - 1);
+                art.hasLiked = false;
+            } else {
+                art.likes += 1;
+                art.hasLiked = true;
+            }
+            renderMainContent();
+        }
+
+        function openShareModal(event, id) {
+            event.stopPropagation();
+            const art = articles.find(a => a.id === id);
+            if (!art) return;
+            sharingArticleData = art;
+            document.getElementById('share-modal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').classList.add('hidden');
+            sharingArticleData = null;
+        }
+
+        function shareArticleInModal() {
+            if (!currentOpenArticleId) return;
+            const art = articles.find(a => a.id === currentOpenArticleId);
+            if (art) {
+                sharingArticleData = art;
+                document.getElementById('share-modal').classList.remove('hidden');
+            }
+        }
+
+        function shareToSocial(platform) {
+            if (!sharingArticleData) return;
+            const title = encodeURIComponent(sharingArticleData.title);
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`Baca berita menarik di Lentera Brambang: "${sharingArticleData.title}"\n\n`);
+
+            let shareUrl = '';
+            if (platform === 'whatsapp') {
+                shareUrl = `https://api.whatsapp.com/send?text=${text}${url}`;
+                window.open(shareUrl, '_blank');
+            } else if (platform === 'facebook') {
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                window.open(shareUrl, '_blank');
+            } else if (platform === 'twitter') {
+                shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+                window.open(shareUrl, '_blank');
+            } else if (platform === 'instagram' || platform === 'tiktok') {
+                navigator.clipboard.writeText(`${sharingArticleData.title}\n${window.location.href}`);
+                alertBoxCustom(`Tautan & teks disalin! Silakan tempel di ${platform === 'instagram' ? 'Instagram' : 'TikTok'}.`);
+            } else if (platform === 'copy') {
+                navigator.clipboard.writeText(window.location.href);
+                alertBoxCustom("Tautan berhasil disalin ke papan klip!");
+            }
+            closeShareModal();
+        }
+
+        function toggleLikeInModal() {
+            if (!currentOpenArticleId) return;
+            const art = articles.find(a => a.id === currentOpenArticleId);
+            if (!art) return;
+
+            if (art.hasLiked) {
+                art.likes = Math.max(0, art.likes - 1);
+                art.hasLiked = false;
+            } else {
+                art.likes += 1;
+                art.hasLiked = true;
+            }
+            updateModalLikeUI(art);
+            renderMainContent();
+        }
+
+        function updateModalLikeUI(art) {
+            const countElem = document.getElementById('modal-like-count');
+            const iconElem = document.getElementById('modal-like-icon');
+            const btnElem = document.getElementById('modal-like-btn');
+
+            if (countElem) countElem.innerText = art.likes;
+            if (iconElem) {
+                iconElem.className = art.hasLiked ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart";
+            }
+            if (btnElem) {
+                btnElem.className = art.hasLiked 
+                    ? "px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 bg-red-50 dark:bg-red-950/40 text-red-600 border border-red-200 dark:border-red-800"
+                    : "px-3 py-1.5 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition flex items-center gap-1.5 border border-slate-200 dark:border-slate-700";
+            }
+        }
+
+        function openAdminModal(editId = null) {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            resetAdminForm();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            resetAdminForm();
+        }
+
+        function previewAdminMedia(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+
+            const placeholder = document.getElementById('admin-upload-placeholder');
+            const previewContainer = document.getElementById('admin-upload-preview');
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                adminMediaUrl = e.target.result;
+                placeholder.classList.add('hidden');
+                previewContainer.classList.remove('hidden');
+
+                if(file.type.startsWith('video/')) {
+                    adminMediaType = 'video';
+                    previewContainer.innerHTML = `<video src="${adminMediaUrl}" class="max-h-32 rounded-xl object-contain" controls></video>`;
+                } else {
+                    adminMediaType = 'image';
+                    previewContainer.innerHTML = `<img src="${adminMediaUrl}" class="max-h-32 rounded-xl object-contain" alt="Preview">`;
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function resetAdminForm() {
+            document.getElementById('admin-form').reset();
+            document.getElementById('admin-upload-placeholder').classList.remove('hidden');
+            document.getElementById('admin-upload-preview').classList.add('hidden');
+            document.getElementById('admin-upload-preview').innerHTML = '';
+            adminMediaUrl = '';
+            adminMediaType = 'image';
+        }
+
+        async function handleAdminSubmit(event) {
+            event.preventDefault();
+            const author = document.getElementById('admin-author').value;
+            const category = document.getElementById('admin-category').value;
+            const title = document.getElementById('admin-title').value;
+            const mediaUrlInput = document.getElementById('admin-media-url').value.trim();
+            const contentText = document.getElementById('admin-content').value;
+
+            const finalMedia = mediaUrlInput || adminMediaUrl || "https://images.unsplash.com/photo-1588854337236-6889d631faa8?auto=format&fit=crop&w=800&q=80";
+
+            if (!window.db) {
+                alertBoxCustom("⚠️ Database belum terhubung.");
+                return;
+            }
+
+            try {
+                const newArtData = {
+                    id: Date.now(),
+                    category: category,
+                    title: title,
+                    author: author,
+                    date: "Baru saja",
+                    image: finalMedia,
+                    mediaType: mediaUrlInput ? 'video' : adminMediaType,
+                    excerpt: contentText.substring(0, 120) + "...",
+                    content: contentText.split('\n').filter(p => p.trim() !== ''),
+                    likes: 0,
+                    hasLiked: false,
+                    timestamp: window.firebaseServerTimestamp()
+                };
+
+                await window.firebaseAddDoc(window.firebaseCollection(window.db, "articles"), newArtData);
+                alertBoxCustom("Berita baru berhasil diterbitkan!");
+
+                closeAdminModal();
+                switchCategory(category);
+            } catch (e) {
+                console.error("Error saving article: ", e);
+                alertBoxCustom("❌ Gagal menyimpan. Ukuran file terlalu besar, gunakan kompresi atau link video.");
+            }
+        }
+
+        function deleteArticle(event, id) {
+            event.stopPropagation();
+            const art = articles.find(a => a.id === id);
+            if (!art) return;
+
+            deletingArticleId = id;
+            document.getElementById('delete-modal-title').innerText = `"${art.title}"`;
+            document.getElementById('delete-confirm-modal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-confirm-modal').classList.add('hidden');
+            deletingArticleId = null;
+        }
+
+        async function confirmDeleteArticle() {
+            if (deletingArticleId !== null) {
+                const art = articles.find(a => a.id === deletingArticleId);
+                if (art && art.docId && window.db) {
+                    try {
+                        await window.firebaseDeleteDoc(window.firebaseDoc(window.db, "articles", art.docId));
+                        closeDeleteModal();
+                        alertBoxCustom("Berita berhasil dihapus!");
+                    } catch (e) {
+                        console.error("Gagal menghapus:", e);
+                    }
+                }
+            }
+        }
+
+        function openArticle(id) {
+            const art = articles.find(a => a.id === id);
+            if(!art) return;
+
+            currentOpenArticleId = id;
+            document.getElementById('modal-category').innerText = art.category;
+            document.getElementById('modal-title').innerText = art.title;
+            document.getElementById('modal-author').innerText = art.author;
+            document.getElementById('modal-date').innerText = art.date;
+            document.getElementById('modal-author-avatar').innerText = art.author.charAt(0).toUpperCase();
+
+            updateModalLikeUI(art);
+
+            const mediaContainer = document.getElementById('modal-media-container');
+            const isYouTube = art.image && (art.image.includes('youtube.com') || art.image.includes('youtu.be'));
+
+            if (isYouTube) {
+                let embedUrl = art.image;
+                if (art.image.includes('watch?v=')) {
+                    embedUrl = art.image.replace('watch?v=', 'embed/');
+                } else if (art.image.includes('youtu.be/')) {
+                    embedUrl = art.image.replace('youtu.be/', 'www.youtube.com/embed/');
+                }
+                mediaContainer.innerHTML = `<iframe src="${embedUrl}" class="w-full h-[350px]" frameborder="0" allowfullscreen></iframe>`;
+            } else if (art.mediaType === 'video') {
+                mediaContainer.innerHTML = `<video src="${art.image}" class="w-full h-full object-cover max-h-[380px]" controls autoplay></video>`;
+            } else {
+                mediaContainer.innerHTML = `<img src="${art.image}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x400/8e0000/fff?text=Lentera+Brambang'">`;
+            }
+
+            const bodyContainer = document.getElementById('modal-body-content');
+            bodyContainer.innerHTML = art.content.map(p => `<p>${p}</p>`).join('');
+
+            listenRealtimeComments(id);
+
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            document.getElementById('article-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentOpenArticleId = null;
+            if (unsubscribeComments) {
+                unsubscribeComments();
+                unsubscribeComments = null;
+            }
+        }
+
+        function listenRealtimeComments(articleId) {
+            if (unsubscribeComments) unsubscribeComments();
+            if (!window.db) return;
+
+            const q = window.firebaseQuery(
+                window.firebaseCollection(window.db, `articles_${articleId}_comments`),
+                window.firebaseOrderBy('timestamp', 'desc')
+            );
+
+            unsubscribeComments = window.firebaseOnSnapshot(q, (snapshot) => {
+                const commentsArr = [];
+                snapshot.forEach((doc) => { commentsArr.push(doc.data()); });
+                document.getElementById('comment-count').innerText = commentsArr.length;
+                renderComments(commentsArr);
+            }, (error) => {
+                console.error("Error loading comments:", error);
+            });
+        }
+
+        function renderComments(commentsArr) {
+            const list = document.getElementById('comments-list');
+            if (!list) return;
+
+            if (commentsArr.length === 0) {
+                list.innerHTML = `<div class="p-4 text-center rounded-2xl bg-slate-50 dark:bg-slate-800/40 text-xs text-slate-400 italic"><i class="fa-regular fa-comment-dots mr-1.5 text-amber-500"></i> Jadilah yang pertama memberikan tanggapan!</div>`;
+                return;
+            }
+
+            const colors = ['bg-brambang-600', 'bg-amber-600', 'bg-blue-600', 'bg-emerald-600', 'bg-purple-600'];
+
+            list.innerHTML = commentsArr.map((c, index) => {
+                const randomColor = colors[index % colors.length];
+                const timeText = c.timestamp && c.timestamp.toDate ? timeAgo(c.timestamp.toDate()) : 'Baru saja';
+                
+                return `
+                    <div class="bg-gradient-to-r from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-full ${randomColor} text-white font-bold flex items-center justify-center text-[10px] shadow-sm">W</div>
+                                <span class="font-bold text-slate-800 dark:text-white text-xs">Warga Anonim</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-medium">${timeText}</span>
+                        </div>
+                        <p class="text-slate-700 dark:text-slate-300 text-xs leading-relaxed pl-8">${escapeHtml(c.text)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function submitComment() {
+            const textInput = document.getElementById('comment-text');
+            const commentText = textInput.value.trim();
+
+            if (!commentText || !currentOpenArticleId || !window.db) return;
+
+            try {
+                await window.firebaseAddDoc(window.firebaseCollection(window.db, `articles_${currentOpenArticleId}_comments`), {
+                    text: commentText,
+                    timestamp: window.firebaseServerTimestamp()
+                });
+                textInput.value = '';
+                alertBoxCustom("✅ Tanggapan berhasil dikirim!");
+            } catch (e) {
+                console.error("Error adding comment:", e);
+            }
+        }
+
+        function timeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " tahun lalu";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " bulan lalu";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " hari lalu";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " jam lalu";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " menit lalu";
+            return "Baru saja";
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        function openUGCModal() {
+            document.getElementById('ugc-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUGCModal() {
+            document.getElementById('ugc-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('ugc-form').reset();
+        }
+
+        function previewUGCMedia(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            ugcMediaFileName = file.name;
+        }
+
+        function handleUGPSubmit(event) {
+            event.preventDefault();
+            const author = document.getElementById('ugc-author').value;
+            const title = document.getElementById('ugc-title').value;
+            const contentText = document.getElementById('ugc-content').value;
+
+            const emailTo = "lenterabrambang@gmail.com";
+            const subject = encodeURIComponent(`[Kiriman Artikel] ${title}`);
+            const body = encodeURIComponent(
+                `Judul: ${title}\nNama Penulis: ${author}\n\nIsi Berita/Opini:\n${contentText}\n\n*Catatan: Berkas terlampir.*`
+            );
+
+            window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+            closeUGCModal();
+            alertBoxCustom("Membuka aplikasi email untuk mengirimkan karya Anda...");
+        }
+
+        function handleSearch(event) {
+            const query = event.target.value.toLowerCase();
+            if(!query.trim()) { renderMainContent(); return; }
+
+            const filtered = articles.filter(art => 
+                art.title.toLowerCase().includes(query) || 
+                art.excerpt.toLowerCase().includes(query) || 
+                art.author.toLowerCase().includes(query)
+            );
+
+            const container = document.getElementById('main-content-view');
+            container.innerHTML = `
+                <div class="mb-6 bg-slate-200 dark:bg-slate-800 p-4 rounded-2xl flex justify-between items-center text-xs font-bold text-slate-800 dark:text-slate-100">
+                    <span>Hasil pencarian: "${query}" (${filtered.length} ditemukan)</span>
+                    <button onclick="renderMainContent()" class="text-brambang-600 dark:text-lentera-amber underline">Reset</button>
+                </div>
+                <div id="articles-grid-container"></div>
+            `;
+            renderGridArticles(filtered);
+        }
+
+        function alertBoxCustom(msg) {
+            const div = document.createElement('div');
+            div.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border-l-4 border-amber-500 text-xs flex items-center space-x-3 transition-all animate-bounce";
+            div.innerHTML = `<i class="fa-solid fa-circle-check text-amber-500 text-base"></i><span>${msg}</span>`;
+            document.body.appendChild(div);
+            setTimeout(() => { div.remove(); }, 3500);
+        }
+    </script>
+</body>
+</html>
